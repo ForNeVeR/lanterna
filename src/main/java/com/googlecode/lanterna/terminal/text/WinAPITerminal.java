@@ -20,6 +20,10 @@
 package com.googlecode.lanterna.terminal.text;
 
 import com.googlecode.lanterna.terminal.TerminalSize;
+import com.googlecode.lanterna.terminal.text.winapi.ConsoleScreenBufferInfo;
+import com.googlecode.lanterna.terminal.text.winapi.Coord;
+import com.googlecode.lanterna.terminal.text.winapi.Kernel32;
+import com.sun.jna.Pointer;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
@@ -31,26 +35,38 @@ import java.nio.charset.Charset;
  */
 public class WinAPITerminal extends StreamBasedTerminal {
 
+    private final Kernel32 kernel32;
+    private Pointer outputHandle;
+
     public WinAPITerminal(
             InputStream inputStream,
             OutputStream outputStream,
             Charset terminalCharset) {
         super(inputStream, outputStream, terminalCharset);
+
+        kernel32 = Kernel32.INSTANCE;
     }
 
     @Override
     public void enterPrivateMode() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // TODO: Clear screen at least?
     }
 
     @Override
     public void exitPrivateMode() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // TODO: Nothing here?
     }
 
     @Override
     public void clearScreen() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Pointer handle = getOutputHandle();
+        ConsoleScreenBufferInfo info = new ConsoleScreenBufferInfo();
+        kernel32.GetConsoleScreenBufferInfo(handle, info);
+
+        int size = info.dwSize.x * info.dwSize.y;
+        Coord coord = new Coord((short) 0, (short) 0);
+
+        // TODO: FillConsoleOutputCharacterW
     }
 
     @Override
@@ -91,5 +107,13 @@ public class WinAPITerminal extends StreamBasedTerminal {
     @Override
     public TerminalSize getTerminalSize() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private Pointer getOutputHandle() {
+        if (outputHandle == null) {
+            outputHandle = kernel32.GetStdHandle(Kernel32.STD_OUTPUT_HANDLE);
+        }
+
+        return outputHandle;
     }
 }

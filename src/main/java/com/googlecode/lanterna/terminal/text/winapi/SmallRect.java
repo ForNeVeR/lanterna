@@ -14,36 +14,22 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
- * Copyright (C) 2010-2012 Martin
  * Copyright (C) 2012 von Never
  */
 
-package com.googlecode.lanterna.test.terminal;
+package com.googlecode.lanterna.terminal.text.winapi;
 
-import com.googlecode.lanterna.TerminalFacade;
-import com.googlecode.lanterna.terminal.Terminal;
+import com.sun.jna.Structure;
 
 /**
- * Test for WinAPI terminal.
+ * Windows SMALL_RECT structure.
  *
  * @author ForNeVeR
  */
-public class WinAPITerminalTest {
+public class SmallRect extends Structure {
 
-    public static void main(String[] args) throws InterruptedException {
-        Terminal terminal = TerminalFacade.createWinAPITerminal();
-        terminal.enterPrivateMode();
-        terminal.clearScreen();
-/*        terminal.moveCursor(10, 5);
-        terminal.putCharacter('H');
-        terminal.putCharacter('e');
-        terminal.putCharacter('l');
-        terminal.putCharacter('l');
-        terminal.putCharacter('o');
-        terminal.putCharacter('!');
-        terminal.moveCursor(0, 0);
-
-        Thread.sleep(5000);
-        terminal.exitPrivateMode();*/
-    }
+    public short left;
+    public short top;
+    public short right;
+    public short bottom;
 }

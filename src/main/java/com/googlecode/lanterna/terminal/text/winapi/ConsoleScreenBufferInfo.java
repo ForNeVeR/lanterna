@@ -17,32 +17,20 @@
  * Copyright (C) 2012 von Never
  */
 
-package com.googlecode.lanterna.terminal.text;
+package com.googlecode.lanterna.terminal.text.winapi;
 
-import com.sun.jna.Library;
-import com.sun.jna.Native;
-import com.sun.jna.Pointer;
-import com.sun.jna.WString;
-import java.nio.Buffer;
+import com.sun.jna.Structure;
 
 /**
- * Kernel32.dll interface.
+ * Windows CONSOLE_SCREEN_BUFFER_INFO structure.
  *
  * @author ForNeVeR
  */
-public interface Kernel32 extends Library {
+public class ConsoleScreenBufferInfo extends Structure {
 
-    Kernel32 INSTANCE = (Kernel32) Native.loadLibrary("Kernel32", Kernel32.class);
-    static final int STD_INPUT_HANDLE = -10;
-    static final int STD_OUTPUT_HANDLE = -11;
-    static final int STD_ERROR_HANDLE = -12;
-
-    Pointer GetStdHandle(int nStdHandle);
-
-    boolean WriteConsoleW(
-            Pointer hConsoleOutput,
-            WString lpBuffer,
-            int nNumberOfCharsToWrite,
-            Buffer lpNumberOfCharsWritten,
-            Pointer lpReserved);
+    public Coord dwSize;
+    public Coord dwCursorPosition;
+    public short wAttributes;
+    public SmallRect srWindow;
+    public Coord dwMaximumWindowSize;
 }
