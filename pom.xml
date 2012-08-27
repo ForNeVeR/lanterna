@@ -99,4 +99,11 @@
             <email>mabe02@gmail.com</email>
         </developer>
     </developers>
+    <dependencies>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+    </dependencies>
 </project>
