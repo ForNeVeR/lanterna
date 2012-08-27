@@ -25,6 +25,7 @@ import com.googlecode.lanterna.terminal.swing.SwingTerminal;
 import com.googlecode.lanterna.terminal.swing.TerminalAppearance;
 import com.googlecode.lanterna.terminal.text.CygwinTerminal;
 import com.googlecode.lanterna.terminal.text.UnixTerminal;
+import com.googlecode.lanterna.terminal.text.WinAPITerminal;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.InputStream;
@@ -215,6 +216,31 @@ public class TerminalFacade {
                                     Charset terminalCharset)
     {
         return new CygwinTerminal(terminalInput, terminalOutput, terminalCharset);
+    }
+    
+    /**
+     * Create the WinAPI terminal instance connected to standard input and standard output using the
+     * default character set.
+     *
+     * @return created terminal.
+     */
+    public static WinAPITerminal createWinAPITerminal() {
+        return createWinAPITerminal(System.in, System.out, DEFAULT_CHARSET);
+    }
+
+    /**
+     * Create the WinAPI terminal instance.
+     *
+     * @param terminalInput
+     * @param terminalOutput
+     * @param terminalCharset
+     * @return created terminal.
+     */
+    public static WinAPITerminal createWinAPITerminal(
+            InputStream terminalInput,
+            OutputStream terminalOutput,
+            Charset terminalCharset) {
+        return new WinAPITerminal(terminalInput, terminalOutput, terminalCharset);
     }
     
     /*

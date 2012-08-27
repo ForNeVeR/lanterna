@@ -14,35 +14,36 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
+ * Copyright (C) 2010-2012 Martin
  * Copyright (C) 2012 von Never
  */
 
-package com.googlecode.lanterna.terminal.text;
+package com.googlecode.lanterna.test.terminal;
 
-import com.sun.jna.Library;
-import com.sun.jna.Native;
-import com.sun.jna.Pointer;
-import com.sun.jna.WString;
-import java.nio.Buffer;
+import com.googlecode.lanterna.TerminalFacade;
+import com.googlecode.lanterna.terminal.Terminal;
 
 /**
- * Kernel32.dll interface.
+ * Test for WinAPI terminal.
  *
  * @author ForNeVeR
  */
-public interface Kernel32 extends Library {
+public class WinAPITerminalTest {
 
-    Kernel32 INSTANCE = (Kernel32) Native.loadLibrary("Kernel32", Kernel32.class);
-    static final int STD_INPUT_HANDLE = -10;
-    static final int STD_OUTPUT_HANDLE = -11;
-    static final int STD_ERROR_HANDLE = -12;
+    public static void main(String[] args) throws InterruptedException {
+        Terminal terminal = TerminalFacade.createWinAPITerminal();
+        terminal.enterPrivateMode();
+        terminal.clearScreen();
+        terminal.moveCursor(10, 5);
+        terminal.putCharacter('H');
+        terminal.putCharacter('e');
+        terminal.putCharacter('l');
+        terminal.putCharacter('l');
+        terminal.putCharacter('o');
+        terminal.putCharacter('!');
+        terminal.moveCursor(0, 0);
 
-    Pointer GetStdHandle(int nStdHandle);
-
-    boolean WriteConsoleW(
-            Pointer hConsoleOutput,
-            WString lpBuffer,
-            int nNumberOfCharsToWrite,
-            Buffer lpNumberOfCharsWritten,
-            Pointer lpReserved);
+        Thread.sleep(5000);
+        terminal.exitPrivateMode();
+    }
 }
