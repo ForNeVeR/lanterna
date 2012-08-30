@@ -62,20 +62,27 @@ public class WinAPITerminal extends StreamBasedTerminal {
     public void clearScreen() {
         // TODO: Error handling.
         Pointer handle = getOutputHandle();
-        ConsoleScreenBufferInfo info = new ConsoleScreenBufferInfo();
-        kernel32.GetConsoleScreenBufferInfo(handle, info);
 
-        int size = info.dwSize.x * info.dwSize.y;
+        TerminalSize terminalSize = getTerminalSize();
+        int size = terminalSize.getColumns() * terminalSize.getRows();
+
         Coord.ByValue coord = new Coord.ByValue();
         coord.x = 0;
         coord.y = 0;
 
         kernel32.FillConsoleOutputCharacterW(handle, ' ', size, coord, ByteBuffer.allocate(4));
+        // TODO: Clear colors?
+        // TODO: Move cursor to (0, 0)?
     }
 
     @Override
     public void moveCursor(int x, int y) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Pointer handle = getOutputHandle();
+        Coord.ByValue coord = new Coord.ByValue();
+        coord.x = (short) x;
+        coord.y = (short) y;
+
+        kernel32.SetConsoleCursorPosition(handle, coord);
     }
 
     @Override
@@ -103,14 +110,21 @@ public class WinAPITerminal extends StreamBasedTerminal {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Deprecated
     @Override
     public TerminalSize queryTerminalSize() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getTerminalSize();
     }
 
     @Override
     public TerminalSize getTerminalSize() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // TODO: Error handling.
+        Pointer handle = getOutputHandle();
+
+        ConsoleScreenBufferInfo info = new ConsoleScreenBufferInfo();
+        kernel32.GetConsoleScreenBufferInfo(handle, info);
+
+        return new TerminalSize(info.dwSize.x, info.dwSize.y);
     }
 
     private Pointer getOutputHandle() {

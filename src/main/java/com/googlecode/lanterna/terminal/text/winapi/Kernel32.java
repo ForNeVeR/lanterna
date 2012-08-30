@@ -43,6 +43,8 @@ public interface Kernel32 extends Library {
             Pointer hConsoleOutput,
             ConsoleScreenBufferInfo lpConsoleScreenBufferInfo);
 
+    boolean SetConsoleCursorPosition(Pointer hConsoleOutput, Coord.ByValue dwCursorPosition);
+
     boolean WriteConsoleW(
             Pointer hConsoleOutput,
             WString lpBuffer,

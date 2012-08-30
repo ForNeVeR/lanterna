@@ -34,7 +34,7 @@ public class WinAPITerminalTest {
         Terminal terminal = TerminalFacade.createWinAPITerminal();
         terminal.enterPrivateMode();
         terminal.clearScreen();
-/*        terminal.moveCursor(10, 5);
+        terminal.moveCursor(10, 5);
         terminal.putCharacter('H');
         terminal.putCharacter('e');
         terminal.putCharacter('l');
@@ -44,6 +44,6 @@ public class WinAPITerminalTest {
         terminal.moveCursor(0, 0);
 
         Thread.sleep(5000);
-        terminal.exitPrivateMode();*/
+        terminal.exitPrivateMode();
     }
 }
