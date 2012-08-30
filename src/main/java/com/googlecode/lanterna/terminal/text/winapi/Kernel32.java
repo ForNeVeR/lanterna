@@ -36,6 +36,14 @@ public interface Kernel32 extends Library {
     static final int STD_INPUT_HANDLE = -10;
     static final int STD_OUTPUT_HANDLE = -11;
     static final int STD_ERROR_HANDLE = -12;
+    static final short FOREGROUND_BLUE = 0x01;
+    static final short FOREGROUND_GREEN = 0x02;
+    static final short FOREGROUND_RED = 0x04;
+    static final short FOREGROUND_INTENSITY = 0x08;
+    static final short BACKGROUND_BLUE = 0x10;
+    static final short BACKGROUND_GREEN = 0x20;
+    static final short BACKGROUND_RED = 0x40;
+    static final short BACKGROUND_INTENSITY = 0x80;
 
     Pointer GetStdHandle(int nStdHandle);
 
@@ -44,6 +52,8 @@ public interface Kernel32 extends Library {
             ConsoleScreenBufferInfo lpConsoleScreenBufferInfo);
 
     boolean SetConsoleCursorPosition(Pointer hConsoleOutput, Coord.ByValue dwCursorPosition);
+
+    boolean SetConsoleTextAttribute(Pointer hConsoleOutput, short wAttributes);
 
     boolean WriteConsoleW(
             Pointer hConsoleOutput,

@@ -22,6 +22,7 @@ package com.googlecode.lanterna.test.terminal;
 
 import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.terminal.Terminal;
+import com.googlecode.lanterna.terminal.Terminal.Color;
 
 /**
  * Test for WinAPI terminal.
@@ -34,6 +35,9 @@ public class WinAPITerminalTest {
         Terminal terminal = TerminalFacade.createWinAPITerminal();
         terminal.enterPrivateMode();
         terminal.clearScreen();
+        terminal.applyForegroundColor(Color.RED);
+        terminal.applyBackgroundColor(Color.BLUE);
+
         terminal.moveCursor(10, 5);
         terminal.putCharacter('H');
         terminal.putCharacter('e');

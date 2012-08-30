@@ -21,6 +21,7 @@ package com.googlecode.lanterna.terminal.text;
 
 import com.googlecode.lanterna.terminal.TerminalSize;
 import com.googlecode.lanterna.terminal.text.winapi.ConsoleScreenBufferInfo;
+import com.googlecode.lanterna.terminal.text.winapi.ConsoleTextAttributeHelper;
 import com.googlecode.lanterna.terminal.text.winapi.Coord;
 import com.googlecode.lanterna.terminal.text.winapi.Kernel32;
 import com.sun.jna.Pointer;
@@ -92,22 +93,46 @@ public class WinAPITerminal extends StreamBasedTerminal {
 
     @Override
     public void applyForegroundColor(Color color) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // TODO: Default value handling.
+        int red = ColorHelper.getRed(color);
+        int green = ColorHelper.getGreen(color);
+        int blue = ColorHelper.getBlue(color);
+        
+        applyForegroundColor(red, green, blue);
     }
 
     @Override
     public void applyForegroundColor(int r, int g, int b) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.out.println("foreground " + r + " " + g + " " + b);
+        // TODO: Error handling.
+        Pointer handle = getOutputHandle();
+        short attributes = getConsoleScreenBufferAttributes(handle);
+        attributes = ConsoleTextAttributeHelper.clearForegroundColor(attributes);
+        attributes = ConsoleTextAttributeHelper.setForegroundColor(attributes, r, g, b);
+
+        kernel32.SetConsoleTextAttribute(handle, attributes);
     }
 
     @Override
     public void applyBackgroundColor(Color color) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // TODO: Default value handling.
+        int red = ColorHelper.getRed(color);
+        int green = ColorHelper.getGreen(color);
+        int blue = ColorHelper.getBlue(color);
+        
+        applyBackgroundColor(red, green, blue);
     }
 
     @Override
     public void applyBackgroundColor(int r, int g, int b) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.out.println("background " + r + " " + g + " " + b);
+        // TODO: Error handling.
+        Pointer handle = getOutputHandle();
+        short attributes = getConsoleScreenBufferAttributes(handle);
+        attributes = ConsoleTextAttributeHelper.clearBackgroundColor(attributes);
+        attributes = ConsoleTextAttributeHelper.setBackgroundColor(attributes, r, g, b);
+
+        kernel32.SetConsoleTextAttribute(handle, attributes);
     }
 
     @Deprecated
@@ -133,5 +158,13 @@ public class WinAPITerminal extends StreamBasedTerminal {
         }
 
         return outputHandle;
+    }
+
+    private short getConsoleScreenBufferAttributes(Pointer outputHandle) {
+        // TODO: Error handling.
+        ConsoleScreenBufferInfo info = new ConsoleScreenBufferInfo();
+        kernel32.GetConsoleScreenBufferInfo(outputHandle, info);
+
+        return info.wAttributes;
     }
 }
