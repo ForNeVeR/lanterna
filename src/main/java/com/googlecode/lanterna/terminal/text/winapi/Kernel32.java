@@ -39,6 +39,10 @@ public interface Kernel32 extends Library {
 
     Pointer GetStdHandle(int nStdHandle);
 
+    boolean GetConsoleScreenBufferInfo(
+            Pointer hConsoleOutput,
+            ConsoleScreenBufferInfo lpConsoleScreenBufferInfo);
+
     boolean WriteConsoleW(
             Pointer hConsoleOutput,
             WString lpBuffer,
@@ -46,7 +50,10 @@ public interface Kernel32 extends Library {
             Buffer lpNumberOfCharsWritten,
             Pointer lpReserved);
 
-    boolean GetConsoleScreenBufferInfo(
+    boolean FillConsoleOutputCharacterW(
             Pointer hConsoleOutput,
-            ConsoleScreenBufferInfo lpConsoleScreenBufferInfo);
+            char cCharacter,
+            int nLength,
+            Coord.ByValue dwWriteCoord,
+            Buffer lpNumberOfCharsWritten);
 }

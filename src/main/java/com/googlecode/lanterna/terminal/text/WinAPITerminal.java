@@ -26,6 +26,7 @@ import com.googlecode.lanterna.terminal.text.winapi.Kernel32;
 import com.sun.jna.Pointer;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 /**
@@ -59,14 +60,17 @@ public class WinAPITerminal extends StreamBasedTerminal {
 
     @Override
     public void clearScreen() {
+        // TODO: Error handling.
         Pointer handle = getOutputHandle();
         ConsoleScreenBufferInfo info = new ConsoleScreenBufferInfo();
         kernel32.GetConsoleScreenBufferInfo(handle, info);
 
         int size = info.dwSize.x * info.dwSize.y;
-        Coord coord = new Coord((short) 0, (short) 0);
+        Coord.ByValue coord = new Coord.ByValue();
+        coord.x = 0;
+        coord.y = 0;
 
-        // TODO: FillConsoleOutputCharacterW
+        kernel32.FillConsoleOutputCharacterW(handle, ' ', size, coord, ByteBuffer.allocate(4));
     }
 
     @Override

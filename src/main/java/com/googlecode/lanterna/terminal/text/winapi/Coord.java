@@ -28,11 +28,9 @@ import com.sun.jna.Structure;
  */
 public class Coord extends Structure {
 
+    public static class ByValue extends Coord implements Structure.ByValue {
+    }
+
     public short x;
     public short y;
-
-    public Coord(short x, short y) {
-        this.x = x;
-        this.y = y;
-    }
 }
