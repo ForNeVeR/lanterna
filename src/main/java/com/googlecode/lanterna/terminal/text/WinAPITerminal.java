@@ -1,6 +1,6 @@
 /*
  * This file is part of lanterna (http://code.google.com/p/lanterna/).
- * 
+ *
  * lanterna is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- * Copyright (C) 2012 von Never
+ *
+ * Copyright (C) 2012-2013 Friedrich von Never
  */
 
 package com.googlecode.lanterna.terminal.text;
@@ -73,7 +73,7 @@ public class WinAPITerminal extends StreamBasedTerminal {
 
         kernel32.FillConsoleOutputCharacterW(handle, ' ', size, coord, ByteBuffer.allocate(4));
         // TODO: Clear colors?
-        // TODO: Move cursor to (0, 0)?
+        moveCursor(handle, coord);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class WinAPITerminal extends StreamBasedTerminal {
         coord.x = (short) x;
         coord.y = (short) y;
 
-        kernel32.SetConsoleCursorPosition(handle, coord);
+        moveCursor(handle, coord);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class WinAPITerminal extends StreamBasedTerminal {
         int red = ColorHelper.getRed(color);
         int green = ColorHelper.getGreen(color);
         int blue = ColorHelper.getBlue(color);
-        
+
         applyForegroundColor(red, green, blue);
     }
 
@@ -119,7 +119,7 @@ public class WinAPITerminal extends StreamBasedTerminal {
         int red = ColorHelper.getRed(color);
         int green = ColorHelper.getGreen(color);
         int blue = ColorHelper.getBlue(color);
-        
+
         applyBackgroundColor(red, green, blue);
     }
 
@@ -167,4 +167,8 @@ public class WinAPITerminal extends StreamBasedTerminal {
 
         return info.wAttributes;
     }
+
+	private void moveCursor(Pointer outputHandle, Coord.ByValue coord) {
+		kernel32.SetConsoleCursorPosition(outputHandle, coord);
+	}
 }
